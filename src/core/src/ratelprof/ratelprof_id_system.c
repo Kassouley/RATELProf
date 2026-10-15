@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <stdatomic.h>
 
 #include "ratelprof/ratelprof_id_system.h"
 #include "ratelprof/ratelprof_status.h"
@@ -14,23 +15,14 @@
 #include "utils/logger.h"
 
 /**
- * @brief Mutex for synchronizing access to the global ID counter.
- * 
- * This mutex ensures that the `global_id_counter` is accessed in a thread-safe manner 
- * by synchronizing access to it, preventing race conditions when incrementing the counter 
- * across multiple threads.
- */
-static pthread_mutex_t id_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-/**
  * @brief Global counter for generating unique IDs across threads.
  * 
  * This variable holds the next unique ID to be allocated. It is incremented each time 
- * a new ID is requested and is accessed in a thread-safe manner using the `id_mutex`.
+ * a new ID is requested and is accessed in a thread-safe manner.
  * 
  * @note This counter starts at 1 and increments with each call to `get_id()`.
  */
-static size_t global_id_counter = 1;
+static _Atomic size_t global_id_counter = 1;
 
 /**
  * @brief TLS key for the thread-local stack.
@@ -97,10 +89,7 @@ ratelprof_status_t get_id(uint64_t *id)
         LOG(LOG_LEVEL_FATAL, "Failed to get thread specific ID stack. %s (code %d)\n", get_error_string(status), status)
     );
 
-    // Lock the mutex to ensure safe access to global_id_counter
-    pthread_mutex_lock(&id_mutex);
-    *id = global_id_counter++;
-    pthread_mutex_unlock(&id_mutex);
+    *id = atomic_fetch_add_explicit(&global_id_counter, 1, memory_order_relaxed);
 
     uint64_t event = *id & RATELPROF_ID_MASK;
     
