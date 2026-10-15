@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 typedef enum ratelprof_memory_op_e {
+    RATELPROF_MEMORY_OP_UNKNOWN,
     RATELPROF_MEMORY_OP_BLIT_SET,
     RATELPROF_MEMORY_OP_BLIT_SET_2D,
     RATELPROF_MEMORY_OP_BLIT_COPY,
@@ -16,7 +17,6 @@ typedef enum ratelprof_memory_op_e {
     // RATELPROF_MEMORY_OP_ALLOC, // Not yet Implement
     // RATELPROF_MEMORY_OP_FREE,
     RATELPROF_MEMORY_NB_OP,
-    RATELPROF_MEMORY_OP_UNKNOWN,
 } ratelprof_memory_op_t;
 
 
