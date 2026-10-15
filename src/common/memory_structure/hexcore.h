@@ -87,7 +87,6 @@ typedef struct
 static hexcore_allocator_t hexcore_allocator = { 0 };
 static __thread hexcore_thread_cache hexcore_cache[HEXCORE_NUM_CLASSES] = { 0 };
 
-#define HEXCORE_DEBUG
 #ifdef HEXCORE_DEBUG
 
 typedef struct
