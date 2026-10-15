@@ -10,12 +10,27 @@
 #include "ratelprof_ext.h"
 #include "ratelprof_ext/ratelprof_completion_signal_pool.h"
 
-#define data_type_t ratelprof_completion_signal_entry_t
-#define data_default_value (ratelprof_completion_signal_entry_t){0}
-#include "memory_structure/ring_buffer.h"
+#include "memory_structure/mpsc_queue.h"
+#include "memory_structure/cht.h"
 
 
 #define CALL_PROF_FUNC(func, ...) ((__##func##_t)profiling_table.api_ptr[PROFILING_ID_##func])(__VA_ARGS__, NULL)
+
+typedef struct ratelprof_completion_signal_s {
+    struct mpsc_queue_node node;
+    struct ratelprof_completion_signal_s *next_free;
+    struct ratelprof_completion_signal_s *next_sig;
+
+    struct {
+        uint64_t key;
+        ratelprof_completion_signal_callback_t callback;
+        void *callback_arg;
+    } props;
+
+    hsa_signal_t proxy;
+    // hsa_signal_t original;
+} ratelprof_completion_signal_t;
+
 
 static ratelprof_completion_signal_pool_t* pool = NULL;
 
@@ -29,44 +44,35 @@ static bool is_signal_finished(ratelprof_completion_signal_t *signal)
     return amd_signal_atomic_load_value(signal->proxy) == 0;
 }
 
-static ring_buffer_t *ratelprof_completion_signal_pool_get_ring_buffer(uint64_t key) 
+static void* ratelprof_completion_signal_pool_get_buffer(uint64_t key) 
 {
-    ring_buffer_t *buffer = NULL;
-    ratelprof_status_t status = ratelprof_find_hash(&pool->ring_buffers, key, (void **)&buffer);
-    if (status == RATELPROF_STATUS_SUCCESS) {
-        return buffer;
-    }
+    void* buffer = cht_get(pool->ht_buffers, key);
+    if (buffer) return buffer;
 
-    buffer = (ring_buffer_t *)calloc(1, sizeof(*buffer));
-    if (!buffer) {
-        return NULL;
-    }
+    buffer = malloc(sizeof(struct mpsc_queue));
+    if (!buffer) return NULL;
+    
+    mpsc_queue_init(buffer);
 
-    if (rb_init(buffer, RATELPROF_COMPLETION_SIGNAL_RING_CAPACITY, RATELPROF_COMPLETION_SIGNAL_RING_CHUNK_SIZE) != 0) {
-        free(buffer);
-        return NULL;
-    }
-    if (ratelprof_insert_hash(&pool->ring_buffers, key, buffer) != RATELPROF_STATUS_SUCCESS) {
-        rb_destroy(buffer);
+    if (cht_set(pool->ht_buffers, key, buffer) != 0) {
         free(buffer);
         return NULL;
     }
 
-    size_t count = atomic_load_explicit(&pool->ring_buffers_array_count, memory_order_relaxed);
+    size_t count = atomic_load_explicit(&pool->buffers_array_count, memory_order_relaxed);
 
-    if (count >= pool->ring_buffers_array_capacity) {
+    if (count >= pool->buffers_array_capacity) {
         /*
          * Cannot safely realloc here if the consumer is concurrently
          * traversing the array.
          */
-        rb_destroy(buffer);
         free(buffer);
         return NULL;
     }
 
-    pool->ring_buffers_array[count] = buffer;
+    pool->buffers_array[count] = buffer;
 
-    atomic_store_explicit(&pool->ring_buffers_array_count, count + 1, memory_order_release);
+    atomic_store_explicit(&pool->buffers_array_count, count + 1, memory_order_release);
 
     return buffer;
 }
@@ -81,21 +87,26 @@ static void *ratelprof_completion_signal_pool_consumer_loop(void *arg)
 
     while (true) {
         
-        size_t ring_buffers_count = atomic_load_explicit(&p->ring_buffers_array_count, memory_order_acquire);
+        size_t buffers_count = atomic_load_explicit(&p->buffers_array_count, memory_order_acquire);
 
-        for (size_t i = 0; i < ring_buffers_count; i++) {
-            ring_buffer_t *ring = p->ring_buffers_array[i];
+        for (size_t i = 0; i < buffers_count; i++) {
+            struct mpsc_queue *q = p->buffers_array[i];
 
-            ratelprof_completion_signal_entry_t entry = rb_peek(ring);
-            if (!is_signal_valid(entry.signal) || !is_signal_finished(entry.signal)) {
+            if (mpsc_queue_is_empty(q)) continue;
+
+            struct mpsc_queue_node* node = mpsc_queue_tail(q);
+            if (!node) continue;
+
+            ratelprof_completion_signal_t* entry = (ratelprof_completion_signal_t*) node;
+            if (!is_signal_valid(entry) || !is_signal_finished(entry)) {
                 continue;
             }
 
-            entry.callback(entry.callback_arg);
+            entry->props.callback(entry->props.callback_arg);
 
-            ratelprof_completion_signal_pool_release_signal(entry.signal);
-
-            rb_advance_tail(ring);
+            mpsc_queue_pop(q);
+            
+            ratelprof_completion_signal_pool_release_signal(entry);
 
             // Decrement the number of events in the pool
             atomic_fetch_sub_explicit(&p->nevents, 1, memory_order_release);
@@ -120,7 +131,8 @@ static ratelprof_completion_signal_t *ratelprof_completion_signal_slot_alloc(voi
         return NULL;
     }
 
-    slot->next = NULL;
+    slot->next_free = NULL;
+    slot->next_sig = NULL;
 
     hsa_status_t status = CALL_PROF_FUNC(hsa_signal_create, 1, 0, NULL, &slot->proxy);
     if (status != HSA_STATUS_SUCCESS) {
@@ -137,7 +149,7 @@ static void ratelprof_completion_signal_slot_push(ratelprof_completion_signal_st
     ratelprof_completion_signal_t *old_head = atomic_load_explicit(&s->head, memory_order_relaxed);
 
     do {
-        slot->next = old_head;
+        slot->next_free = old_head;
     } while (!atomic_compare_exchange_weak_explicit(
         &s->head,
         &old_head,
@@ -152,7 +164,7 @@ static ratelprof_completion_signal_t *ratelprof_completion_signal_slot_pop(ratel
     if (head == NULL) return NULL;
 
     while (head != NULL) {
-        ratelprof_completion_signal_t *next = head->next;
+        ratelprof_completion_signal_t *next = head->next_free;
 
         if (atomic_compare_exchange_weak_explicit(
                 &s->head,
@@ -178,10 +190,10 @@ ratelprof_status_t ratelprof_completion_signal_pool_init()
         return RATELPROF_STATUS_MALLOC_FAILED;
     }
 
-    pool->ring_buffers_array_capacity = 64;
-    atomic_init(&pool->ring_buffers_array_count, 0);
-    pool->ring_buffers_array = (void**)calloc(pool->ring_buffers_array_capacity, sizeof(void*));
-    if (!pool->ring_buffers_array) {
+    pool->buffers_array_capacity = RATELPROF_COMPLETION_SIGNAL_BUFFER_NUMBER;
+    atomic_init(&pool->buffers_array_count, 0);
+    pool->buffers_array = (void**)calloc(pool->buffers_array_capacity, sizeof(void*));
+    if (!pool->buffers_array) {
         free(pool);
         return RATELPROF_STATUS_MALLOC_FAILED;
     }
@@ -189,27 +201,16 @@ ratelprof_status_t ratelprof_completion_signal_pool_init()
     atomic_init(&pool->free_slots.head, NULL);
     pool->running = false;
 
-    ratelprof_status_t status = ratelprof_hashtable_init(&pool->ring_buffers, 64);
-    if (status != RATELPROF_STATUS_SUCCESS) {
+    pool->ht_buffers = cht_create(RATELPROF_COMPLETION_SIGNAL_BUFFER_NUMBER);
+    if (!pool->ht_buffers) {
         free(pool);
-        return status;
+        return RATELPROF_STATUS_OUT_OF_MEMORY;
     }
     atomic_init(&pool->nevents, 0);
-
-    pthread_mutex_init(&pool->mutex, NULL);
 
     return RATELPROF_STATUS_SUCCESS;
 }
 
-static void hash_table_free_value(void *value) 
-{
-    ring_buffer_t *ring = (ring_buffer_t *)value;
-    if (!ring) {
-        return;
-    }
-    rb_destroy(ring);
-    free(ring);
-}
 
 ratelprof_status_t ratelprof_completion_signal_pool_fini()
 {
@@ -217,7 +218,6 @@ ratelprof_status_t ratelprof_completion_signal_pool_fini()
         return RATELPROF_STATUS_INVALID_POOL;
     }
 
-    pthread_mutex_lock(&pool->mutex);
     // ratelprof_completion_signal_t *slot = pool->all_slots;
     // while (slot) {
     //     ratelprof_completion_signal_t *next = slot->next;
@@ -228,10 +228,8 @@ ratelprof_status_t ratelprof_completion_signal_pool_fini()
     //     slot = next;
     // }
 
-    ratelprof_hashtable_free(&pool->ring_buffers, hash_table_free_value);
-    pthread_mutex_unlock(&pool->mutex);
+    cht_destroy(pool->ht_buffers, free);
 
-    pthread_mutex_destroy(&pool->mutex);
     free(pool);
     pool = NULL;
     return RATELPROF_STATUS_SUCCESS;
@@ -239,9 +237,7 @@ ratelprof_status_t ratelprof_completion_signal_pool_fini()
 
 ratelprof_status_t ratelprof_completion_signal_pool_acquire_signal(ratelprof_completion_signal_t **out) 
 {
-    if (!out) {
-        return RATELPROF_STATUS_INVALID_PTR;
-    }
+    if (!out) return RATELPROF_STATUS_INVALID_PTR;
 
     ratelprof_completion_signal_t *signal = ratelprof_completion_signal_slot_pop(&pool->free_slots);
 
@@ -273,23 +269,15 @@ static ratelprof_status_t ratelprof_completion_signal_pool_enqueue(uint64_t key,
         return RATELPROF_STATUS_INVALID_PTR;
     }
 
-    ratelprof_completion_signal_entry_t entry = {
-        .key = key,
-        .signal = signal,
-        .callback = callback,
-        .callback_arg = callback_arg
-    };
+    signal->props.key = key;
+    signal->props.callback = callback;
+    signal->props.callback_arg = callback_arg;
 
-
-    pthread_mutex_lock(&pool->mutex);
-
-    ring_buffer_t *ring = ratelprof_completion_signal_pool_get_ring_buffer(key);
-    if (!ring) {
-        pthread_mutex_unlock(&pool->mutex);
+    void* buffer = ratelprof_completion_signal_pool_get_buffer(key);
+    if (!buffer) {
         return RATELPROF_STATUS_KEY_NOT_FOUND;
     }
-    rb_write(ring, entry);
-    pthread_mutex_unlock(&pool->mutex);
+    mpsc_queue_insert(buffer, &signal->node);
 
     // Increment the number of events in the pool
     atomic_fetch_add_explicit(&pool->nevents, 1, memory_order_relaxed);
