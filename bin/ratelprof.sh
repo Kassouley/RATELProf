@@ -21,7 +21,7 @@ EOF
 
 BIN_DIR=$(dirname $0)
 LUA_DIR=$BIN_DIR/lua
-export LUA_PATH="$LUA_DIR/?.lua;;"
+export LUA_PATH="$LUA_PATH;$LUA_DIR/?.lua;;"
 export INSTALL_DIR="$(realpath "$BIN_DIR/..")"
 
 # Function to check if a command exists
@@ -31,9 +31,9 @@ command_exists() {
 
 # Determine which Lua interpreter to use
 if command_exists luajit; then
-    LUA_EXEC="luajit"
+    LUA_EXEC="$(command -v luajit)"
 elif command_exists lua; then
-    LUA_EXEC="lua"
+    LUA_EXEC="$(command -v lua)"
 else
     echo "Error: Neither LuaJIT nor Lua is installed."
     exit 1
@@ -60,8 +60,7 @@ case "$CMD" in
 
     profile|stats|analyze|visualize|inspect|export|summarize|breakdown)
         eval "$LUA_EXEC $LUA_DIR/main.lua $args"
-        exit_code=$?
-        exit $exit_code
+        exit $?
         ;;
 
     *)
@@ -69,6 +68,3 @@ case "$CMD" in
         display_help
         ;;
 esac
-
-
-
