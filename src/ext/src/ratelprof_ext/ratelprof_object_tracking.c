@@ -218,7 +218,6 @@ ratelprof_object_tracking_pool_map_new_MemOp_to_kernelObj(
     uint64_t kernel_object, 
     ratelprof_memory_op_t memop
 ) {
-    printf("Mapping new MemOp to kernel object: %lu -> %d\n", kernel_object, memop);
     if (cht_set(object_tracking_pool->memop_kernelObj_map, kernel_object, (void*)memop) != 0) {
         return RATELPROF_STATUS_OUT_OF_MEMORY;
     }
