@@ -34,11 +34,16 @@ const char* ratelprof_get_phase_name(ratelprof_phase_t phase)
     return "Unknown phase";
 }
 
-
 ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time)
 {
     return time - lifecycle.normalizer;
 }
+
+ratelprof_time_t ratelprof_get_normalized_monotonic_time(ratelprof_time_t time)
+{
+    return time - lifecycle.monotonic_normalizer;
+}
+
 
 
 void ratelprof_next_phase(void)
@@ -58,11 +63,13 @@ void ratelprof_next_phase(void)
 
 void ratelprof_start_lifecycle(void) 
 {
-    ratelprof_clock_t ts = ratelprof_get_clock_now();
+    ratelprof_clock_t t = ratelprof_get_clock_now();
+    ratelprof_clock_t ts = ratelprof_get_clock_now_timespec();
     
     lifecycle.experiment_start_epoch = ratelprof_get_real_timespec();
     lifecycle.current_phase          = RATELPROF_IN_CONSTRUCTOR_PHASE;
-    lifecycle.normalizer             = ratelprof_get_time_ns(ts);
+    lifecycle.monotonic_normalizer   = ratelprof_ts_to_ns(ts);
+    lifecycle.normalizer             = ratelprof_get_time_ns(t);
 }
 
 

@@ -52,6 +52,11 @@ typedef union ratelprof_clock_s {
 typedef uint64_t ratelprof_time_t;
 
 
+void ratelprof_time_init(void);
+
+ratelprof_clock_t ratelprof_get_clock_now_timespec(void);
+ratelprof_clock_t ratelprof_get_clock_now_tsc(void);
+
 /**
  * @brief Retrieves the current monotonic timestamp.
  *

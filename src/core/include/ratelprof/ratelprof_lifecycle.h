@@ -69,6 +69,7 @@ typedef struct ratelprof_lifecycle_s {
     ratelprof_clock_t experiment_start_epoch; /**< The start epoch of the current profiling experiment */
     ratelprof_clock_t phase_stop_ts[RATELPROF_NB_PHASE]; /**< Stop time for each phase (start is previous phase stop) */
     ratelprof_time_t normalizer; /**< Normalizer time (in ns) used to normalize and reduce timing data */
+    ratelprof_time_t monotonic_normalizer; /**< Normalizer time (in ns) used to normalize and reduce timing data */
 
     ratelprof_main_data_t main_data;   /**< Data related to the program's main execution. */
 } ratelprof_lifecycle_t;
@@ -157,6 +158,7 @@ const char* ratelprof_get_phase_name(ratelprof_phase_t phase);
  */
 ratelprof_time_t ratelprof_get_normalized_time(ratelprof_time_t time);
 
+ratelprof_time_t ratelprof_get_normalized_monotonic_time(ratelprof_time_t time);
 
 /**
  * @brief Retrieve the normalized constructor phase time.

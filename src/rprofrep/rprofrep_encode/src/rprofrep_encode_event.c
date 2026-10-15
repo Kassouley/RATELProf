@@ -73,7 +73,7 @@ static void add_memory_activity_data_to_buffer(
 
     msgpack_encode_uint(evt, activity->id);
 
-    msgpack_encode_uint(evt, ratelprof_get_normalized_time(activity->start_time));
+    msgpack_encode_uint(evt, ratelprof_get_normalized_monotonic_time(activity->start_time));
     
     msgpack_encode_uint(evt, dur);
 
@@ -118,7 +118,7 @@ static void add_barrier_activity_data_to_buffer(
     
     msgpack_encode_uint(evt, activity->id);
 
-    msgpack_encode_uint(evt, ratelprof_get_normalized_time(activity->start_time));
+    msgpack_encode_uint(evt, ratelprof_get_normalized_monotonic_time(activity->start_time));
 
     msgpack_encode_uint(evt, dur);
 
@@ -153,7 +153,7 @@ static void add_kernel_activity_data_to_buffer(
 
     msgpack_encode_uint(evt, activity->id);
 
-    msgpack_encode_uint(evt, ratelprof_get_normalized_time(activity->start_time));
+    msgpack_encode_uint(evt, ratelprof_get_normalized_monotonic_time(activity->start_time));
 
     msgpack_encode_uint(evt, dur);
 
