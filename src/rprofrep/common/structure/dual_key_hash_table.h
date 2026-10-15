@@ -39,6 +39,11 @@ static inline hash_table_t *ht_create(size_t size) {
     hash_table_t *ht = (hash_table_t*) calloc(1, sizeof(hash_table_t));
     if (!ht) return NULL;
 
+    // Size must be a power of two to avoid modulo so we automatically adjust it
+    if ((size & (size - 1)) != 0) {
+        size = 1ULL << (64 - __builtin_clzll(size - 1));
+    }
+
     ht->size = size;
     ht->count = 0;
     ht->buckets = (ht_node_t**) calloc(size, sizeof(ht_node_t*));
@@ -70,7 +75,7 @@ static inline int ht_insert(hash_table_t *ht, ht_dual_key_t key, void *value) {
     if (!ht) return 1;
 
     uint64_t hash = key_hash(key);
-    size_t idx = hash % ht->size;
+    size_t idx = hash & (ht->size - 1);
 
     for (ht_node_t *n = ht->buckets[idx]; n; n = n->next) {
         if (key_equal(n->key, key)) {
@@ -94,7 +99,7 @@ static inline void *ht_get(hash_table_t *ht, ht_dual_key_t key) {
     if (!ht) return NULL;
 
     uint64_t hash = key_hash(key);
-    size_t idx = hash % ht->size;
+    size_t idx = hash & (ht->size - 1);
 
     for (ht_node_t *n = ht->buckets[idx]; n; n = n->next) {
         if (key_equal(n->key, key)) {
@@ -109,7 +114,7 @@ static inline int ht_remove(hash_table_t *ht, ht_dual_key_t key, void (*free_val
     if (!ht) return 1;
 
     uint64_t hash = key_hash(key);
-    size_t idx = hash % ht->size;
+    size_t idx = hash & (ht->size - 1);
 
     ht_node_t *prev = NULL;
     ht_node_t *n = ht->buckets[idx];
