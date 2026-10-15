@@ -5,7 +5,6 @@
 
 #include "ratelprof_ext.h"
 
-#include "ratelprof_ext/ratelprof_activity_pool.h"
 #include "ratelprof_ext/ratelprof_completion_signal_pool.h"
 
 #include "domains/fun_proto/prof_hsa_traced_functions.h"
@@ -99,7 +98,7 @@ static inline ratelprof_status_t ratelprof_intercept_copy(hsa_agent_t dst_agent,
                                             size_t size,
                                             hsa_signal_t* completion_signal, 
                                             uint32_t engine_id) {
-    ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
+    ratelprof_gpu_activity_t* activity = ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_gpu_activity_t));
 
     get_id(&activity->id);
     get_correlation_id(&activity->corr_id, NULL);
@@ -179,7 +178,7 @@ ratelprof_create_kernel_dispatch_activity(
         return RATELPROF_STATUS_SUCCESS;
     }
 
-    ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
+    ratelprof_gpu_activity_t* activity = ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_gpu_activity_t));
 
     hsa_agent_t agent = ratelprof_get_agent_from_queue(queue);;
 
@@ -234,7 +233,7 @@ static inline ratelprof_status_t
 ratelprof_create_barrier_dispatch_activity(
         void* packet, hsa_queue_t* queue, ratelprof_domain_ext_t domain
 ) {
-    ratelprof_gpu_activity_t* activity = ratelprof_memory_pool_alloc(sizeof(ratelprof_gpu_activity_t));
+    ratelprof_gpu_activity_t* activity = ratelprof_activity_pool_alloc_activity(sizeof(ratelprof_gpu_activity_t));
 
     hsa_signal_t* packet_signal = NULL;
 
