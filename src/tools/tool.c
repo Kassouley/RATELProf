@@ -116,8 +116,6 @@ ratelprof_status_t onLoad()
     ratelprof_pool_properties_t props = {
         .activity_callback = activity_callback,
         .activity_callback_user_args = user_args,
-        .chunk_size = envtoll("RATELPROF_POOL_CHUNK_SIZE", 0xfff),
-        .capacity = envtoll("RATELPROF_POOL_CAPACITY", 0xfff)
     };
 
     ratelprof_activity_pool_init(props);
