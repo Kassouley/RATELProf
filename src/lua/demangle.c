@@ -8,35 +8,22 @@ extern char *__cxa_demangle(const char *mangled_name,
                             size_t *length,
                             int *status);
 
-
-static char *strip_parameters(const char *demangled) {
+static char *strip_parameters(char *demangled) {
     if (!demangled) return NULL;
 
-    const char *paren = strchr(demangled, '(');
-    if (!paren) {
-        return strdup(demangled);
-    }
+    char *paren = strrchr(demangled, '(');
+    if (paren)
+        *paren = '\0';
 
-    size_t len = (size_t)(paren - demangled);
-    char *stripped = malloc(len + 1);
-    if (!stripped) return NULL;
-
-    strncpy(stripped, demangled, len);
-    stripped[len] = '\0';
-    return stripped;
+    return demangled;
 }
 
 static char *demangle(const char *mangled, int no_param) {
-    int status = 0;
+    int status;
     char *demangled = __cxa_demangle(mangled, NULL, NULL, &status);
 
-    if (status == 0 && demangled != NULL) {
-        if (no_param) {
-            char *result = strip_parameters(demangled);
-            free(demangled);
-            return result;
-        }
-        return demangled;
+    if (status == 0 && demangled) {
+        return no_param ? strip_parameters(demangled) : demangled;
     }
 
     return strdup(mangled);
