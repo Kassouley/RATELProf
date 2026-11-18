@@ -394,12 +394,6 @@ function RProfRep:topology_get_profiled_process()
 end
 
 
-function RProfRep:gpu_to_json(prefix)
-    for _, rprofrep in pairs(self.reports_rprofrep) do
-        rprofrep:gpu_to_json(prefix)
-    end
-end
-
 function RProfRep:export_section(id, filename, mode, rank)
     if rank then
         return self.reports_rprofrep[rank]:export_section(id, filename, mode)
@@ -421,6 +415,7 @@ function RProfRep:string_section_to_json(filename, mode, need_demangled, rank)
     end
 end
 
+
 function RProfRep:get_main_time(rank)
     if rank then
         return self.reports_rprofrep[rank]:get_main_time()
@@ -428,6 +423,13 @@ function RProfRep:get_main_time(rank)
         return self.__current_rprofrep:get_main_time()
     else
         error("get_main_time must be called inside a for_each_rank callback or with a rank argument.")
+    end
+end
+
+
+function RProfRep:for_each_report_file(callback)
+    for rank, rprofrep in pairs(self.reports_rprofrep) do
+        callback(rank, rprofrep)
     end
 end
 

@@ -42,7 +42,6 @@ end
 
 function summary.process_summary_data(rprofrep, fs, summary_data, summary_dataset)
     local __SUMMARY_DATA__ = {}
-    local gpu_path = fs.data.gpus:path()
 
     local profiling_rows = rearrange_data(summary_data.global_data)
     for idx, data in pairs(summary_dataset) do
@@ -59,17 +58,25 @@ function summary.process_summary_data(rprofrep, fs, summary_data, summary_datase
 
     __SUMMARY_DATA__.GPU = {}
 
-    rprofrep:gpu_to_json(gpu_path.."/attribute")
+    local gpu_path = fs.data.gpus:path()
 
-    local gpu_file_list = ratelprof.fs.listdir(gpu_path)
-    for _, file in ipairs(gpu_file_list) do
-        if ratelprof.fs.has_extension(file, "json") then
-            local output_file = ratelprof.utils.json_to_js(gpu_path.."/"..file, "window.currentGPU")
-            local basename = ratelprof.fs.basename(output_file)
-            local node = string.match(basename, "%d+")
-            __SUMMARY_DATA__.GPU[node] = basename
+    rprofrep:for_each_report_file(function(rank, obj)
+        local machine = obj:get_hostname()
+        local dir = gpu_path.."/"..machine.."/"
+        obj:gpu_to_json(dir.."attribute")
+
+        __SUMMARY_DATA__.GPU[machine] = {}
+
+        local gpu_file_list = ratelprof.fs.listdir(dir)
+        for _, file in ipairs(gpu_file_list) do
+            if ratelprof.fs.has_extension(file, "json") then
+                local output_file = ratelprof.utils.json_to_js(dir.."/"..file, "window.currentGPU")
+                local basename = ratelprof.fs.basename(output_file)
+                local node = string.match(basename, "%d+")
+                __SUMMARY_DATA__.GPU[machine][node] = basename
+            end
         end
-    end
+    end)
 
     fs.data.summary:write("const __SUMMARY_DATA__=", JSON:encode(__SUMMARY_DATA__))
 end
