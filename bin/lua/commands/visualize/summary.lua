@@ -63,6 +63,7 @@ function summary.process_summary_data(rprofrep, fs, summary_data, summary_datase
     rprofrep:for_each_report_file(function(rank, obj)
         local machine = obj:get_hostname()
         local dir = gpu_path.."/"..machine.."/"
+        fs.data.gpus:mkdir(machine)
         obj:gpu_to_json(dir.."attribute")
 
         __SUMMARY_DATA__.GPU[machine] = {}

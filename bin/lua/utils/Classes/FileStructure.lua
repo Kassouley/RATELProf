@@ -42,6 +42,11 @@ function FileStructure:path()
     return self:__tostring()
 end
 
+function FileStructure:mkdir(dirname)
+    local path = self._root .. "/" .. ((self._prefix and self._prefix .. "/" .. dirname) or dirname)
+    ratelprof.fs.mkdir(path)
+end
+
 -- generate directories/files
 function FileStructure:generate()
     local function walk(tbl, prefix)
