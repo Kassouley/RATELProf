@@ -187,7 +187,7 @@ void handle_signal(int sig) {
     raise(sig);
 }
 
-__attribute__((constructor(102))) void init(void) 
+__attribute__((constructor(101))) void init(void) 
 {
     // signal(SIGSEGV, handle_signal); // segmentation fault
     // signal(SIGABRT, handle_signal); // abort()
