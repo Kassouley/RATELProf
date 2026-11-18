@@ -214,8 +214,12 @@ ratelprof_status_t ratelprof_completion_signal_pool_init()
 
 ratelprof_status_t ratelprof_completion_signal_pool_fini()
 {
-    if (!pool || pool->running) {
+    if (!pool) {
         return RATELPROF_STATUS_INVALID_POOL;
+    }
+
+    if (pool->running) {
+        ratelprof_completion_signal_pool_stop_consumer();
     }
 
     // ratelprof_completion_signal_t *slot = pool->all_slots;
