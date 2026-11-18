@@ -7,3 +7,6 @@
 [submodule "external/RATELProf-Visualize"]
 	path = external/RATELProf-Visualize
 	url =  https://github.com/Kassouley/RATELProf-Visualize.git
+[submodule "external/RATELMonitor"]
+	path = external/RATELMonitor
+	url = https://github.com/Kassouley/RATELMonitor.git
