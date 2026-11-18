@@ -10,9 +10,9 @@ static inline int get_mpi_rank_from_env()
     const char* env_vars[] = {
         "OMPI_COMM_WORLD_RANK",
         "PMI_RANK",
-        "MPI_LOCALRANKID",
         "SLURM_PROCID",
-        "MPIRUN_RANK"
+        "MPIRUN_RANK",
+        "MPI_LOCALRANKID"
     };
 
     for (int i = 0; i < sizeof(env_vars)/sizeof(env_vars[0]); ++i) {
