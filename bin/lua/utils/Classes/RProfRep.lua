@@ -39,6 +39,7 @@ function RProfRep:new(rprofrep_files)
     instance.rank_count = #rprofrep_files
     instance.reports_rprofrep = {}
     instance.reports_filename = {}
+    instance.reports_per_machine = {}
 
     for _, filename in ipairs(rprofrep_files) do
         check_report_file(filename)
@@ -46,6 +47,12 @@ function RProfRep:new(rprofrep_files)
         local rprofrep_obj = c_rprofrep.new(filename)
 
         local rank = rprofrep_obj:get_rank()
+        local hostname = rprofrep_obj:get_hostname()
+
+        if not instance.reports_per_machine[hostname] then
+            instance.reports_per_machine[hostname] = {}
+        end
+        table.insert(instance.reports_per_machine[hostname], rprofrep_obj)
 
         if instance.reports_filename[rank] then
             error(string.format("Duplicate MPI rank found in report file %s and %s: RANK %s", filename, instance.reports_filename[rank], rank))
@@ -352,6 +359,15 @@ function RProfRep:get_reports_filename_str(rank, max_len)
     end
 
     return s
+end
+
+function RProfRep:get_hostname_concat()
+    local hostname_list = {}
+    for hostname, _ in pairs(self.reports_per_machine) do
+        table.insert(hostname_list, hostname)
+    end
+
+    return table.concat(hostname_list, ", ")
 end
 
 

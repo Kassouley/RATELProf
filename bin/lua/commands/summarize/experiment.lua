@@ -5,6 +5,7 @@ local experiment_info = {
     {key = "app",     label = "Application"},
     {key = "date",    label = "Date"},
     {key = "version", label = "Tool Version"},
+    {key = "machine", label = "Machine(s)"},
     {key = "file",    label = "Report File"},
     {key = "domain",  label = "Domain Traced"},
 }
@@ -24,6 +25,7 @@ function summarize_experiment.get_experiment_info(rprofrep)
         date    = rprofrep:get_run_date(),
         version = rprofrep:get_tool_version(),
         file    = rprofrep:get_reports_filename_str(nil, 0),
+        machine = rprofrep:get_hostname_concat(),
         domain  = table.concat(domains, ", "),
     }
 

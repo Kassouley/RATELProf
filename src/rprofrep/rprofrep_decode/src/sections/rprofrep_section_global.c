@@ -35,6 +35,7 @@ rprofrep_status_t rprofrep_decode_global_section(
     uint64_t offset = 0;
 
     out->rank             = __read_mp_int(buffer, &offset);
+    out->hostname         = __read_mp_string(buffer, &offset);
 
     out->tool_version[0]  = __read_mp_uint(buffer, &offset);
     out->tool_version[1]  = __read_mp_uint(buffer, &offset);
@@ -196,4 +197,16 @@ rprofrep_status_t rprofrep_get_gpu_id_from_agent(rprofrep_decode_context_t* ctx,
     }
 
     return RPROFREP_STATUS_NOT_FOUND("Agent ID %lu not found.\n", agent_id);
+}
+
+rprofrep_status_t rprofrep_get_hostname(rprofrep_decode_context_t* ctx, char** hostname)
+{
+    RPROFREP_CHECK_VALID_PTR(ctx, hostname);
+
+    rprofrep_global_data_t* data = NULL;
+    RPROFREP_CHECK_CALL(rprofrep_get_section(ctx, RPROFREP_SECTION_GLOBAL, (void**)&data));
+
+    *hostname = data->hostname;
+
+    return RPROFREP_STATUS_SUCCESS;
 }

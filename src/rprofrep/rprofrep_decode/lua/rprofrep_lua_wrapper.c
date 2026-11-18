@@ -794,6 +794,17 @@ static int l_context_get_main_time(lua_State* L) {
     return 1;
 }
 
+static int l_context_get_hostname(lua_State* L) {
+    rprofrep_decode_context_t *ctx = rprofrep_lua_get_context(L, 1);
+    char* hostname = NULL;
+
+    rprofrep_lua_check(L, rprofrep_get_hostname(ctx, &hostname),
+        "failed to get hostname");
+
+    lua_pushstring(L, hostname);
+    return 1;
+}
+
 static const struct luaL_Reg l_context_metamethods[] = {
     register_class_method(context, __gc),
     {NULL, NULL}
@@ -825,6 +836,7 @@ static const struct luaL_Reg l_context_methods[] = {
     register_class_method(context, export_section),
     register_class_method(context, string_section_to_json),
     register_class_method(context, get_main_time),
+    register_class_method(context, get_hostname),
     {NULL, NULL}
 };
 

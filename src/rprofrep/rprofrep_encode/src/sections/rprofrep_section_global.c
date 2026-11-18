@@ -18,6 +18,15 @@ rprofrep_status_t rprofrep_write_global_section(rprofrep_encode_context_t* ctx, 
     (void) ctx;
     (void) data;
     
+    char hostname[256] = {0};
+    size_t hostname_len = sizeof(hostname);
+    if (gethostname(hostname, hostname_len) == 0)
+    {
+        hostname[hostname_len - 1] = '\0';
+    } else {
+        hostname[0] = 'N'; hostname[1] = '/'; hostname[2] = 'A'; hostname[3] = '\0';
+    }
+
     size_t i = 0;
 
     msgpack_buffer_t buf = {0};
@@ -25,6 +34,7 @@ rprofrep_status_t rprofrep_write_global_section(rprofrep_encode_context_t* ctx, 
 
     // Encode experiment rank
     msgpack_encode_int(&buf, get_mpi_rank_from_env());
+    msgpack_encode_string(&buf, hostname);
 
     // Encode tool version
     msgpack_encode_uint(&buf, RATELPROF_VERSION_MAJOR);
