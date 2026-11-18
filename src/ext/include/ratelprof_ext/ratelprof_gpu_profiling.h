@@ -153,8 +153,8 @@ static inline hsa_agent_t get_agent_from_ptr(void* ptr) {
 
     hsa_status_t s = CALL_PROF_FUNC(hsa_amd_pointer_info, ptr, &info, NULL, NULL, NULL);
 
-    if (s != HSA_STATUS_SUCCESS) {
-        LOG(LOG_LEVEL_ERROR, "pointer query failed\n");
+    if (s != HSA_STATUS_SUCCESS || info.type == HSA_EXT_POINTER_TYPE_UNKNOWN) {
+        LOG(LOG_LEVEL_WARN, "pointer query failed\n");
         return (hsa_agent_t){0};
     }
 

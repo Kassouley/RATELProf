@@ -17,14 +17,6 @@ static uint64_t engine_id_from_mask(unsigned int mask) {
     return -(__builtin_ctz(mask) + 2);
 }
 
-static ratelprof_agent_object_t* get_agent_object_from_handle(uint64_t handle) {
-    ratelprof_agent_object_t* agent_obj = NULL;
-    ratelprof_status_t status = ratelprof_object_tracking_pool_get_agent_from_handle(handle, (void*)&agent_obj);
-    if (status != RATELPROF_STATUS_SUCCESS) {
-        LOG(LOG_LEVEL_FATAL, "Failed to get agent object from handle. %s (code %d)\n", get_error_string_ext(status), status);
-    }
-    return agent_obj;
-}
 
 static void add_memory_activity_data_to_buffer(
     rprofrep_encode_context_t* ctx,
@@ -47,11 +39,15 @@ static void add_memory_activity_data_to_buffer(
     if (is_blit_copy_kernel(memop) || memop == RATELPROF_MEMORY_OP_SDMA_COPY) {
         uint64_t src_agent_handle = activity->args.memory.copy.src_agent.handle;
         uint64_t dst_agent_handle = activity->args.memory.copy.dst_agent.handle;
-        ratelprof_agent_object_t* src_agent_obj = get_agent_object_from_handle(src_agent_handle);
-        ratelprof_agent_object_t* dst_agent_obj = get_agent_object_from_handle(dst_agent_handle);
 
-        uint8_t src_type = src_agent_obj->type;
-        uint8_t dst_type = dst_agent_obj->type;
+        ratelprof_agent_object_t* src_agent_obj = NULL;
+        ratelprof_agent_object_t* dst_agent_obj = NULL;
+
+        ratelprof_object_tracking_pool_get_agent_from_handle(src_agent_handle, (void*)&src_agent_obj);
+        ratelprof_object_tracking_pool_get_agent_from_handle(dst_agent_handle, (void*)&dst_agent_obj);
+
+        uint8_t src_type = src_agent_obj ? src_agent_obj->type : 0;
+        uint8_t dst_type = dst_agent_obj ? dst_agent_obj->type : 0;
         event_name = get_copy_name(src_type, dst_type);
         if (src_type == 1) {
             gpu_handle = src_agent_handle;

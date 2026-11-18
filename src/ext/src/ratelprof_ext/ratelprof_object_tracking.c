@@ -169,7 +169,6 @@ ratelprof_object_tracking_pool_get_kernelName_from_kernelObj(
 ) {
     *kernel_name = cht_get(object_tracking_pool->kernelName_kernelObj_map, kernel_object);
     if (*kernel_name == NULL) {
-        LOG(LOG_LEVEL_ERROR, "Failed to get a kernel name from hash table.\n");
         return RATELPROF_STATUS_KEY_NOT_FOUND;
     }
     return RATELPROF_STATUS_SUCCESS;
@@ -194,7 +193,6 @@ ratelprof_object_tracking_pool_get_agent_from_handle(
 ) {
     *agent = cht_get(object_tracking_pool->agents_list, handle);
     if (*agent == NULL) {
-        LOG(LOG_LEVEL_ERROR, "Failed to get a agent from hash table.\n");
         return RATELPROF_STATUS_KEY_NOT_FOUND;
     }
     return RATELPROF_STATUS_SUCCESS;
