@@ -165,7 +165,10 @@ void onExit()
     ratelprof_time_t destructor_time   = ratelprof_get_destructor_time() / 1e6;
 
     LOG(LOG_LEVEL_DEBUG, "Finalizing RATELProf . . . \r");
-    if (ratelprof_fini() != RATELPROF_STATUS_SUCCESS) LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf.\n");
+    ratelprof_status_t status = ratelprof_fini();
+    if (status != RATELPROF_STATUS_SUCCESS) {
+        LOG(LOG_LEVEL_FATAL, "Failed to finalize RATELProf. %s (code %d)\n", get_error_string_ext(status), status);
+    }
     LOG(LOG_LEVEL_DEBUG, "Finalizing RATELProf . . . Done\n");
 
     LOG_IF(is_main_rank(), LOG_LEVEL_INFO, "Application duration : %10lu ms\n", main_time);
